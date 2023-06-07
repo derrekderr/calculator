@@ -1,0 +1,59 @@
+import UIKit
+
+class ViewController: UIViewController {
+    @IBOutlet weak var displayLabel: UILabel!
+    
+    var numberOnScreen: Double = 0
+    var previousNumber: Double = 0
+    var performingOperation = false
+    var operation = 0
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    @IBAction func numberButtonTapped(_ sender: UIButton) {
+        if performingOperation {
+            displayLabel.text = String(sender.tag)
+            numberOnScreen = Double(displayLabel.text!)!
+            performingOperation = false
+        } else {
+            displayLabel.text = displayLabel.text! + String(sender.tag)
+            numberOnScreen = Double(displayLabel.text!)!
+        }
+    }
+    
+    @IBAction func operationButtonTapped(_ sender: UIButton) {
+        if displayLabel.text != "" && sender.tag != 11 && sender.tag != 16 {
+            previousNumber = Double(displayLabel.text!)!
+            
+            if sender.tag == 12 { // Divide
+                displayLabel.text = "/"
+            } else if sender.tag == 13 { // Multiply
+                displayLabel.text = "x"
+            } else if sender.tag == 14 { // Subtract
+                displayLabel.text = "-"
+            } else if sender.tag == 15 { // Add
+                displayLabel.text = "+"
+            }
+            
+            operation = sender.tag
+            performingOperation = true
+        } else if sender.tag == 16 { // Equals
+            if operation == 12 { // Divide
+                displayLabel.text = String(previousNumber / numberOnScreen)
+            } else if operation == 13 { // Multiply
+                displayLabel.text = String(previousNumber * numberOnScreen)
+            } else if operation == 14 { // Subtract
+                displayLabel.text = String(previousNumber - numberOnScreen)
+            } else if operation == 15 { // Add
+                displayLabel.text = String(previousNumber + numberOnScreen)
+            }
+        } else if sender.tag == 11 { // Clear
+            displayLabel.text = ""
+            previousNumber = 0
+            numberOnScreen = 0
+            operation = 0
+        }
+    }
+}
